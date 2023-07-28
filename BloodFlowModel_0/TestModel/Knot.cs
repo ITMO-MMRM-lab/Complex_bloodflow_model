@@ -468,9 +468,9 @@ namespace BloodFlow
                 }
             }
 
-            if (Program.knot_agent_mode == 3)
+   /*         if (Program.knot_agent_mode == 3)
             // 3D recalculation of agent_c. ONLY for "one in, two out".
-   /*         {
+            {
                 // Finding inflows and outflows. 
                 List<double> area_in = new List<double>();
                 List<double> area_out = new List<double>();
@@ -703,8 +703,8 @@ namespace BloodFlow
                 nodes_out.Clear();
                 index_out.Clear();
                 nodes_out_min.Clear();
-            }
-        }     */
+            }  */
+        }     
 
         protected MDFunction[] chrt_func;
         protected MDFunction mass_conservation_func;
