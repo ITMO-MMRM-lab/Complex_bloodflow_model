@@ -1,0 +1,5 @@
+<Test>
+Topology: 0_2_cutoff.top
+InletFlux: 0 stationary_inflow.txt
+OutletParams: params_0_2_cutoff.par
+Task: 

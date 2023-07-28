@@ -1,0 +1,5 @@
+<Test>
+Topology: examples\PulseProp\line_system_0.25_refl.top
+InletFlux: 0 examples\PulseProp\gauss_200_flux_5cm.txt
+OutletParams:
+Task:

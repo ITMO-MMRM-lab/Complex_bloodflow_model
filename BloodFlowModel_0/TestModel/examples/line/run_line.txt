@@ -1,0 +1,7 @@
+<Test>
+Topology: gor_line.top
+InletFlux: 0 LCA_inlet_flux.txt
+OutletParams: gravity_par.par
+CollateralParams: 
+Task: 
+DownDirection: 0 -1 0

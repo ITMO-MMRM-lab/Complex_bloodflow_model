@@ -1,0 +1,5 @@
+<Test>
+Topology: 1_0_cutoff.top
+InletFlux: 0 heart_inflow.txt
+OutletParams: params_1_0_cutoff.par
+Task:

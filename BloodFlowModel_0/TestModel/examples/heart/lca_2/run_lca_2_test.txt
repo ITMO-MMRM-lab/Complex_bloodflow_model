@@ -1,0 +1,6 @@
+<Test>
+Topology: new_lca_025.top
+InletFlux: 33 LCA_inlet_flux.txt
+OutletParams: new_lca_par.par
+Task: 
+Agent: 33

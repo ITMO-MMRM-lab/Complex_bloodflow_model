@@ -1,0 +1,6 @@
+<Test>
+Topology: 1_0_aorta_femoral_with_drains.top
+InletFlux: 0 heart_inflow.txt
+OutletParams: params_1_0_cutoff.par
+Task:
+DownDirection: 0 0 0

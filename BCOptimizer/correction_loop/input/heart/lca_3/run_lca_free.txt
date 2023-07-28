@@ -1,0 +1,4 @@
+<Test>
+Topology: 03_lca_025.top
+InletFlux: 33 LCA_inlet_flux.txt
+OutletParams: 03_lca_par.par

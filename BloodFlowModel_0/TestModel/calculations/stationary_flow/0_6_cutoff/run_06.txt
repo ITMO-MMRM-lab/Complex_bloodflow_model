@@ -1,0 +1,5 @@
+<Test>
+Topology: 0_6_secondary.top
+InletFlux: 0 stationary_inflow.txt
+OutletParams: 0_6_secondary.par
+Task: 

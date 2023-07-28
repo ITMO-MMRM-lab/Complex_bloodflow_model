@@ -1,0 +1,5 @@
+<Test>
+Topology: line_system_0.25.top
+InletFlux: 0 static_inflow.txt
+OutletParams: line_system_0.25.par
+Task: 4:0.85 4:0.9

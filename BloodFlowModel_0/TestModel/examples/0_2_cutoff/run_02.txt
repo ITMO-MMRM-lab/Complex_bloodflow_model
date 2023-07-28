@@ -1,0 +1,5 @@
+<Test>
+Topology: examples\0_2_cutoff\0_2_cutoff.top
+InletFlux: 0 examples\0_2_cutoff\heart_inflow.txt
+OutletParams: examples\0_2_cutoff\params_0_2_cutoff.par
+Task:

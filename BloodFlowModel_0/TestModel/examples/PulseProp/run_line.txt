@@ -1,0 +1,5 @@
+<Test>
+Topology: line_system_0.25.top
+InletFlux: 0 gauss_200_flux_5cm.txt
+OutletParams:
+Task:

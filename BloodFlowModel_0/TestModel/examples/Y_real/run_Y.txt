@@ -1,0 +1,6 @@
+<Test>
+Topology: Y.top
+InletFlux: 123 inlet_flux.txt
+OutletParams: Y_par.par
+CollateralParams: 
+Task: 

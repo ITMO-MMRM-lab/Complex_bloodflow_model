@@ -1,0 +1,6 @@
+<Test>
+Topology: new_lca_025.top
+InletFlux: 33 LCA_inlet_flux.txt
+OutletParams: new_lca_par.par
+CollateralParams: new_lca_collateral_one.par
+Task: 208:0.1 208:0.2 208:0.3 208:0.4 208:0.5 208:0.6 208:0.7 208:0.8 208:0.9 208:0.95 208:0.99

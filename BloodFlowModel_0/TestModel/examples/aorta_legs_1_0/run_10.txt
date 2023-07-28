@@ -1,0 +1,6 @@
+<Test>
+Topology: 1_0_aorta_legs.top
+InletFlux: 0 heart_inflow_constant.txt
+OutletParams: params_1_0_cutoff.par
+Task:
+DownDirection: 0 -1 0

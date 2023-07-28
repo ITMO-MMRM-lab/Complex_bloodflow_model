@@ -1,0 +1,6 @@
+<Test>
+Topology: brain_scaled.top
+InletFlux: 36 Carotid_inlet.txt 
+OutletParams: new_lca_par.par
+CollateralParams: 
+Task: 

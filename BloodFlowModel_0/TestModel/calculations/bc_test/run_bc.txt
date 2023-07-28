@@ -1,0 +1,5 @@
+<Test>
+Topology: test_part.top
+InletFlux: 4 vert_inflow.txt
+OutletParams: test_part.par
+Task:

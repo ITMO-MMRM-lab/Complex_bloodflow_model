@@ -1,0 +1,5 @@
+<HeadCalc>
+Topology: 0_2_cutoff_head.top
+InletFlux: 174 Carotid_inlet.txt, 250 Vertebral_inlet.txt, 1506 Carotid_inlet.txt, 1762 Vertebral_inlet.txt
+OutletParams: 0_2_cutoff_head.par
+Task:
