@@ -625,7 +625,7 @@ namespace BloodFlow
                                 Iprev = I;
                                 I = Math.Sin(angle / 2) * Math.Pow(Math.Cos(angle / 2), 1 - (zeta + 2)) / ((zeta + 2) - 1) - Math.Sin(-(angle / 2)) * Math.Pow(Math.Cos(-(angle / 2)), 1 - (zeta + 2)) / ((zeta + 2) - 1) + ((zeta + 2) - 2) / ((zeta + 2) - 1) * Iprev;
                             }
-                        }
+                        }  //  !!!  It is not finished. Then it is needed to calculate the final integral.
                         velocity_sum = I;
                         angle = angle + angle_step;
                     }
