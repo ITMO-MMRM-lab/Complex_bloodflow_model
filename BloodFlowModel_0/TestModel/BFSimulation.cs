@@ -668,28 +668,28 @@ namespace BloodFlow
                 double agent_sum = 0.0f;
                 if (current_time >= re_entering_delta[i])   // 18.477 seconds aprox for Y_test
                 {
-                    if (i == 0) // Gastric system compartment
-                    {
+                  //  if (i == 0) // Gastric system compartment
+                  //  {
                         if (insert_type == "O")
                         {
                             if ((current_time > (Program.STABILISATION_TIME + 0.5)) && (agent_in == true))
                             {
                                 double const_init_amount = 0.00886226925452758;
-                                total_amount += Math.Pow((1.0f - Convert.ToDouble(k_el / 10000.0f) - Convert.ToDouble((k_el * 10.0f) / 10000.0f)), (re_entering_delta[i] * 10000f)) * const_init_amount;
+                                total_amount += Math.Pow((1.0f - Convert.ToDouble(k_el / 10000.0f)), (re_entering_delta[i] * 10000f)) * const_init_amount;
                                 agent_in = false;
                             }
                             else
                             {
-                                total_amount += Math.Pow((1.0f - Convert.ToDouble(k_el / 10000.0f) - Convert.ToDouble((k_el * 10.0f) / 10000.0f)), (re_entering_delta[i] * 10000f)) * outlets_agent_amount[i].Dequeue();
+                                total_amount += Math.Pow((1.0f - Convert.ToDouble(k_el / 10000.0f)), (re_entering_delta[i] * 10000f)) * outlets_agent_amount[i].Dequeue();
                             }
                         }
                         else
                             total_amount += Math.Pow((1.0f - Convert.ToDouble(k_el / 10000.0f) - Convert.ToDouble((k_el * 10.0f) / 10000.0f)), (re_entering_delta[i] * 10000f)) * outlets_agent_amount[i].Dequeue();
-                    }
-                    else // Renal system compartment
-                    {
-                        total_amount += Math.Pow((1.0f - Convert.ToDouble(k_el / 10000.0f) - Convert.ToDouble((k_el * 20.0f) / 10000.0f)), (re_entering_delta[i] * 10000f)) * outlets_agent_amount[i].Dequeue();
-                    }
+              //      }
+              //      else // Renal system compartment
+              //      {
+              //          total_amount += Math.Pow((1.0f - Convert.ToDouble(k_el / 10000.0f) - Convert.ToDouble((k_el * 20.0f) / 10000.0f)), (re_entering_delta[i] * 10000f)) * outlets_agent_amount[i].Dequeue();
+              //      }
                     // total_amount += Math.Pow((1.0f - Convert.ToDouble(k_el / 10000.0f)), (re_entering_delta[i] * 10000f)) * outlets_agent_amount[i].Dequeue();
                 }
             }
@@ -888,7 +888,7 @@ namespace BloodFlow
         public List<double> re_entering_delta;
         public Queue<double>[] outlets_agent_amount;
         public double[] outlets_agent_avg;
-        public double k_el = 0.32f / 3600.0f; // 0.2f / 60.0f; // 0.32f / 3600.0f;   // 0.2, 1/min epinephrine | 0.32, 1/hour ibuprofen
+        public double k_el = 0.0146f / 60.0f; // 0.2f / 60.0f; // 0.32f / 3600.0f;   // 0.2, 1/min epinephrine | 0.32, 1/hour ibuprofen
         public double heart_amount_agent = 0;
         public string insert_type;
         public bool agent_in = true;
