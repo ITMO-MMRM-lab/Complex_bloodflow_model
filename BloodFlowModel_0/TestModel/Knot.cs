@@ -596,7 +596,7 @@ namespace BloodFlow
                         area = (1.0 / 2.0) * Math.Pow(R0, 2) * (angle - Math.Sin(angle));
                         AngleofSpl = angle;
                         I0 = Math.Tan(angle / 2) - Math.Tan(-(angle / 2));
-                        I1 = Math.Sin(angle / 2) / Math.Pow(Math.Cos(angle / 2), 2) / 2 + Math.Log(Math.Abs(Math.Tan((angle / 2) / 2 + Math.PI / 4))) / 2 - Math.Sin(-(angle / 2)) / Math.Pow(Math.Cos(-(angle / 2)), 2) / 2 + Math.Log(Math.Abs(Math.Tan((-(angle / 2) / 2 + Math.PI / 4))) / 2;
+                        I1 = Math.Sin(angle / 2) / Math.Pow(Math.Cos(angle / 2), 2) / 2 + Math.Log(Math.Abs(Math.Tan((angle / 2) / 2 + Math.PI / 4))) / 2 - Math.Sin(-(angle / 2)) / Math.Pow(Math.Cos(-(angle / 2)), 2) / 2 - Math.Log(Math.Abs(Math.Tan(-(angle / 2) / 2 + Math.PI / 4))) / 2;
                         zeta_first = 0;
                         I = 0;
                         if (zeta_int == 0)
