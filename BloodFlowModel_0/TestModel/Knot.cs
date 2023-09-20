@@ -468,7 +468,7 @@ namespace BloodFlow
                 }
             }
 
-   /*         if (Program.knot_agent_mode == 3)
+            if (Program.knot_agent_mode == 3)
             // 3D recalculation of agent_c. ONLY for "one in, two out".
             {
                 // Finding inflows and outflows. 
@@ -483,7 +483,7 @@ namespace BloodFlow
                 List<int> index_in = new List<int>();
                 List<int> index_out = new List<int>();
                 double flux_out_min_val;
-                double area_min, area_max, area, area_step, angle, angle_step, delta_area, area_prev, angle_prev, AngleofSpl, AngleofSpl1, AngleofSpl2;
+                double area_min, area_max, area, area_step, angle, angle_step, delta_area, area_prev, angle_prev, AngleofSpl, phi_1, phi_2, x_1, y_1, x_2, y_2;
                 double flux_min, flux_sum, flux_step, velocity_min, velocity_sum, velocity_sum_step, velocity_sum_max, velocity_in_min_part, velocity_in_max_part;
                 double velocity_dir;
                 double dx, dy;
@@ -571,14 +571,8 @@ namespace BloodFlow
                     double zeta_double;
                     int zeta, zeta_int, zeta_first, k;
                     double I, I0, I1, Iprev;
-                    double x_sec_min, x_sec_max, y_sec_min, y_sec_max;  // Coordinates in section.
+                    double x_sec_min, x_sec_max, y_sec_min, y_sec_max;  // Coordinates of points of min and max on the circumference in section.
                     angle_step = Math.PI / 180;
-                    x_sec_min = 0;
-                    x_sec_max = 0;
-                    y_sec_min = 0;
-                    y_sec_max = 0;
-                    AngleofSpl1 = 0;
-                    AngleofSpl2 = 0;
                     velocity_in_p = 0;
                     Section Section_in = new Section(nodes_in[0].position, R0, nodes_in[0].dir_vector);
                     Section_in.x_axis = new Vector3(1, 0, 0);
@@ -587,6 +581,11 @@ namespace BloodFlow
                     Vector3 Vector_sec_2 = Vector_2 - nodes_in[0].position;
                     Vector3 Vector_sec_min = Vector_min - nodes_in[0].position;
                     Vector3 Vector_sec_max = Vector_max - nodes_in[0].position;
+                    Vector3 x_sec_axis = new Vector3(1, 0, 0);
+                    Vector3 y_sec_axis = new Vector3(0, 1, 0);
+                    x_sec_min = Vector3.Dot(Vector_sec_min, x_sec_axis);
+                    y_sec_min = Vector3.Dot(Vector_sec_min, y_sec_axis);
+                    AngleofSpl = 0;
                     angle = 0;
                     area = 0;
                     velocity_sum = 0;
@@ -625,29 +624,91 @@ namespace BloodFlow
                                 Iprev = I;
                                 I = Math.Sin(angle / 2) * Math.Pow(Math.Cos(angle / 2), 1 - (zeta + 2)) / ((zeta + 2) - 1) - Math.Sin(-(angle / 2)) * Math.Pow(Math.Cos(-(angle / 2)), 1 - (zeta + 2)) / ((zeta + 2) - 1) + ((zeta + 2) - 2) / ((zeta + 2) - 1) * Iprev;
                             }
-                        }  //  !!!  It is not finished. Then it is needed to calculate the final integral.
-                        velocity_sum = I;
+                        }  
+                        velocity_sum = Math.Pow(R0, 2) * nodes_in[0].velocity * Math.Pow(Math.Cos(AngleofSpl / 2), zeta_double + 2) / zeta_double * I - Math.Pow(R0, 2) * nodes_in[0].velocity * (zeta_double + 2) / (2 * zeta_double) * Math.Sin(AngleofSpl) + Math.Pow(R0, 2) * nodes_in[0].velocity / 2 * AngleofSpl;
                         angle = angle + angle_step;
                     }
                     area_min = area;
                     area_max = nodes_in[0].lumen_area - area_min;
+                    // Finding phi_1 and phi_2.
+                    phi_1 = Math.Atan(y_sec_min / x_sec_min) - AngleofSpl / 2;
+                    phi_2 = Math.Atan(y_sec_min / x_sec_min) + AngleofSpl / 2;
+                    // Finding x_1, y_1 and x_2, y_2.
+                    x_1 = R0 * Math.Cos(phi_1);
+                    y_1 = R0 * Math.Sin(phi_1);
+                    x_2 = R0 * Math.Cos(phi_2);
+                    y_2 = R0 * Math.Sin(phi_2);
+                    // y = a * x + b
+                    double a, b;
+                    a = (y_2 - y_1) / (x_2 - x_1);
+                    b = y_1 - x_1 * (y_2 - y_1) / (x_2 - x_1);
                     // Calculating substance going out. ONLY for some case.
-                    double agent_c_in_p; // Concentration in the point of the section. 
-                    double agent_c_in_min_part, agent_c_in_max_part;
-                    double volume_ag_in_min = 0; // Divided on delta t
-                    double volume_ag_in_max = 0; // Divided on delta t
-                    double volume_ag_out_min = 0; // Divided on delta t
-                    double volume_ag_out_max = 0; // Divided on delta t
-                    double volume_out_min = 0; // Divided on delta t
-                    double volume_out_max = 0; // Divided on delta t
-                    agent_c_in_min_part = nodes_in[0].calcAgent_cInSectionPoint(nodes_in[0], x_sec_min, y_sec_min);  // !!! Change
-                    agent_c_in_max_part = nodes_in[0].calcAgent_cInSectionPoint(nodes_in[0], x_sec_max, y_sec_max);  // !!! Change
-                    volume_ag_in_min = agent_c_in_min_part * velocity_in_min_part * area_min;  // !!! Change
-                    volume_ag_in_max = agent_c_in_max_part * velocity_in_max_part * area_max;   // !!! Change
+                    /*             double agent_sum_min_part, agent_sum_max_part;
+                    double S, alpha, x_bias, y_bias;
+                    S = nodes_in[0].agent_c;
+                    alpha = nodes_in[0].agent_shape;
+                    x_bias = nodes_in[0].agent_xbias;
+                    y_bias = nodes_in[0].agent_ybias;
+                    if ((y_1 >= 0) && (y_2 >= 0))
+                    {
+ // Wrong:                       agent_sum_min_part = (S * (6 * b * x_1 - 6 * b * x_2 - 3 * x_1 * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_1, 2), 1 / 2) + 3 * x_2 * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_2, 2), 1 / 2) + 3 * a * Math.Pow(x_1, 2) - 3 * a * Math.Pow(x_2, 2) - 3 * Math.Pow(R0, 2) * Math.Asin(x_1 / R0) + 3 * Math.Pow(R0, 2) * Math.Asin(x_2 / R0) - 4 * alpha * Math.Pow(x_1, 3) * y_bias + 4 * alpha * Math.Pow(x_2, 3) * y_bias - 2 * alpha * Math.Pow(x_1, 3) * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_1, 2), 1 / 2) + 2 * alpha * Math.Pow(x_2, 3) * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_2, 2), 1 / 2) + Math.Pow(a, 3) * alpha * Math.Pow(x_1, 4) - Math.Pow(a, 3) * alpha * Math.Pow(x_2, 4) + 3 * a * alpha * Math.Pow(x_1, 4) - 3 * a * alpha * Math.Pow(x_2, 4) + 4 * alpha * b * Math.Pow(x_1, 3) + 4 * alpha * Math.Pow(b, 3) * x_1 - 4 * alpha * b * Math.Pow(x_2, 3) - 4 * alpha * Math.Pow(b, 3) * x_2 - 6 * Math.Pow(R0, 2) * alpha * Math.Pow(x_bias, 2) * Math.Asin(x_1 / R0) + 6 * Math.Pow(R0, 2) * alpha * Math.Pow(x_bias, 2) * Math.Asin(x_2 / R0) - 6 * Math.Pow(R0, 2) * alpha * Math.Pow(y_bias, 2) * Math.Asin(x_1 / R0) + 6 * Math.Pow(R0, 2) * alpha * Math.Pow(y_bias, 2) * Math.Asin(x_2 / R0) - 6 * Math.Pow(R0, 2) * alpha * b * x_1 + 6 * Math.Pow(R0, 2) * alpha * b * x_2 + 12 * Math.Pow(R0, 2) * alpha * x_1 * y_bias - 12 * Math.Pow(R0, 2) * alpha * x_2 * y_bias - 8 * a * alpha * Math.Pow(x_1, 3) * x_bias + 8 * a * alpha * Math.Pow(x_2, 3) * x_bias + 12 * alpha * b * x_1 * Math.Pow(x_bias, 2) - 12 * alpha * b * Math.Pow(x_1, 2) * x_bias - 12 * alpha * b * x_2 * Math.Pow(x_bias, 2) + 12 * alpha * b * Math.Pow(x_2, 2) * x_bias + 12 * alpha * b * x_1 * Math.Pow(y_bias, 2) - 12 * alpha * Math.Pow(b, 2) * x_1 * y_bias - 12 * alpha * b * x_2 * Math.Pow(y_bias, 2) + 12 * alpha * Math.Pow(b, 2) * x_2 * y_bias + 2 * Math.Pow(R0, 2) * alpha * x_1 * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_1, 2), 1 / 2) - 2 * Math.Pow(R0, 2) * alpha * x_2 * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_2, 2), 1 / 2) - 8 * Math.Pow(R0, 2) * alpha * x_bias * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_1, 2), 1 / 2) + 8 * Math.Pow(R0, 2) * alpha * x_bias * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_2, 2), 1 / 2) - 3 * Math.Pow(R0, 2) * a * alpha * Math.Pow(x_1, 2) + 3 * Math.Pow(R0, 2) * a * alpha * Math.Pow(x_2, 2) - 6 * alpha * x_1 * Math.Pow(x_bias, 2) * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_1, 2), 1 / 2) + 8 * alpha * Math.Pow(x_1, 2) * x_bias * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_1, 2), 1 / 2) + 6 * alpha * x_2 * Math.Pow(x_bias, 2) * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_2, 2), 1 / 2) - 8 * alpha * Math.Pow(x_2, 2) * x_bias * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_2, 2), 1 / 2) - 6 * alpha * x_1 * Math.Pow(y_bias, 2) * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_1, 2), 1 / 2) + 6 * alpha * x_2 * Math.Pow(y_bias, 2) * Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_2, 2), 1 / 2) + 6 * a * alpha * Math.Pow(b, 2) * Math.Pow(x_1, 2) - 6 * a * alpha * Math.Pow(b, 2) * Math.Pow(x_2, 2) + 4 * Math.Pow(a, 2) * alpha * b * Math.Pow(x_1, 3) - 4 * Math.Pow(a, 2) * alpha * b * Math.Pow(x_2, 3) + 6 * a * alpha * Math.Pow(x_1, 2) * Math.Pow(x_bias, 2) - 6 * a * alpha * Math.Pow(x_2, 2) * Math.Pow(x_bias, 2) + 6 * a * alpha * Math.Pow(x_1, 2) * Math.Pow(y_bias, 2) - 6 * a * alpha * Math.Pow(x_2, 2) * Math.Pow(y_bias, 2) - 4 * Math.Pow(a, 2) * alpha * Math.Pow(x_1, 3) * y_bias + 4 * Math.Pow(a, 2) * alpha * Math.Pow(x_2, 3) * y_bias - 12 * a * alpha * b * Math.Pow(x_1, 2) * y_bias + 12 * a * alpha * b * Math.Pow(x_2, 2) * y_bias)) / 6;
+                    }
+                    if ((y_1 < 0) && (y_2 < 0))
+                    {
+                    }   */
+                    double step; // The step of integration - the distance between two points of the section. All section is divided on squares. The points are the centers of the squares.
+                    double x_sec, y_sec;
+                    double agent_c_sum_in_min, agent_c_sum_in_max;
+                    double volume_ag_in_min = 0; 
+                    double volume_ag_in_max = 0; 
+                    double volume_ag_out_min = 0; 
+                    double volume_ag_out_max = 0; 
+                    double volume_out_min = 0; 
+                    double volume_out_max = 0; 
+                    bool check_in = true; // The variable for checking if the point is into the circumference (and not on the boundary).
+                    step = R0 / 10;
+                    x_sec = -step / 2;
+                    y_sec = -R0 + step / 2;
+                    agent_c_sum_in_min = 0;
+                    agent_c_sum_in_max = 0;
+                    while (y_sec <= R0)
+                    {
+                        check_in = true;
+                        while (check_in == true)
+                        {
+                            x_sec = x_sec - step;
+                            if (Math.Pow(x_sec, 2) + Math.Pow(y_sec, 2) >= Math.Pow(R0, 2))
+                            {
+                                check_in = false;
+                            }
+                        }
+                        x_sec = x_sec + step;
+                        check_in = true;
+                        while (check_in == true)
+                        {
+                            if (((Math.Abs(y_sec) > Math.Abs(a * x_sec + b)) && (Math.Abs(y_sec) < Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_sec, 2), 1 / 2))) || ((Math.Abs(x_sec) > Math.Abs(y_sec / a - b / a)) && (Math.Abs(x_sec) < Math.Pow(Math.Pow(R0, 2) - Math.Pow(y_sec, 2), 1 / 2))))
+                            {
+                                agent_c_sum_in_min = agent_c_sum_in_min + nodes_in[0].calcAgent_cInSectionPoint(nodes_in[0], x_sec, y_sec) * Math.Pow(step, 2);
+                            }
+                            else
+                            {
+                                agent_c_sum_in_max = agent_c_sum_in_max + nodes_in[0].calcAgent_cInSectionPoint(nodes_in[0], x_sec, y_sec) * Math.Pow(step, 2);
+                            }
+                            x_sec = x_sec + step;
+                            if (Math.Pow(x_sec, 2) + Math.Pow(y_sec, 2) >= Math.Pow(R0, 2))
+                            {
+                                check_in = false;
+                            }
+                        }
+                        x_sec = -step / 2;
+                        y_sec = y_sec + step;
+                    }
+                    volume_ag_in_min = agent_c_sum_in_min * nodes_in[0].velocity * Program.TIMESTEP;  
+                    volume_ag_in_max = agent_c_sum_in_max * nodes_in[0].velocity * Program.TIMESTEP;   
                     volume_ag_out_min = volume_ag_in_min;
                     volume_ag_out_max = volume_ag_in_max;
-                    volume_out_min = Math.Abs((nodes_out[i_min].velocity / v_sign[i_min])) * nodes_out[i_min].lumen_area; // ONLY for flow going out
-                    volume_out_max = Math.Abs((nodes_out[i_max].velocity / v_sign[i_max])) * nodes_out[i_max].lumen_area; // ONLY for flow going out
+                    volume_out_min = Math.Abs((nodes_out[i_min].velocity / v_sign[i_min])) * nodes_out[i_min].lumen_area * Program.TIMESTEP; // ONLY for flow going out
+                    volume_out_max = Math.Abs((nodes_out[i_max].velocity / v_sign[i_max])) * nodes_out[i_max].lumen_area * Program.TIMESTEP; // ONLY for flow going out
                     nodes_out[i_min].agent_c = volume_ag_in_min / volume_out_min;
                     nodes_out[i_max].agent_c = volume_ag_in_max / volume_out_max;
                     nodes_out[i_min].agent_shape = 0;
@@ -655,7 +716,7 @@ namespace BloodFlow
                     nodes_out[i_min].agent_xbias = 0;
                     nodes_out[i_max].agent_xbias = 0;
                     nodes_out[i_min].agent_ybias = 0;
-                    nodes_out[i_max].agent_ybias = 0;
+                    nodes_out[i_max].agent_ybias = 0;    
                     // Writing calculated values to the vnet nodes. ONLY for some case.
                     int j;
                     j = index_in[0];
@@ -674,8 +735,8 @@ namespace BloodFlow
                     nodes[j].agent_xbias = nodes_out[1].agent_xbias;
                     nodes[j].agent_ybias = nodes_out[1].agent_ybias;
                     // Calculating agent_c in core_node.
-                    double volume_sum = 0; // Divided on delta t
-                    double volume_ag_sum = 0; // Divided on delta t
+                    double volume_sum = 0; 
+                    double volume_ag_sum = 0; 
                     double agent_c_av;
                     for (int i = 0; i < L; i++)
                     {
@@ -703,7 +764,7 @@ namespace BloodFlow
                 nodes_out.Clear();
                 index_out.Clear();
                 nodes_out_min.Clear();
-            }  */
+            }  
         }     
 
         protected MDFunction[] chrt_func;
