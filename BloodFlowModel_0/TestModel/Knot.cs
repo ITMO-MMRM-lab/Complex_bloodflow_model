@@ -571,7 +571,8 @@ namespace BloodFlow
                     double zeta_double;
                     int zeta, zeta_int, zeta_first, k;
                     double I, I0, I1, Iprev;
-                    double x_sec_min, x_sec_max, y_sec_min, y_sec_max;  // Coordinates of points of min and max on the circumference in section.
+                    double x_sec_min, x_sec_max, y_sec_min, y_sec_max, phi_min;  // Coordinates of points of min and max on the circumference in section.
+                    double h;
                     angle_step = Math.PI / 180;
                     velocity_in_p = 0;
                     Section Section_in = new Section(nodes_in[0].position, R0, nodes_in[0].dir_vector);
@@ -630,19 +631,17 @@ namespace BloodFlow
                     }
                     area_min = area;
                     area_max = nodes_in[0].lumen_area - area_min;
+                    h = R0 * (1 - Math.Cos(AngleofSpl / 2));
                     // Finding phi_1 and phi_2.
-                    phi_1 = Math.Atan(y_sec_min / x_sec_min) - AngleofSpl / 2;
-                    phi_2 = Math.Atan(y_sec_min / x_sec_min) + AngleofSpl / 2;
+                    phi_min = Math.Atan(y_sec_min / x_sec_min);
+                    phi_1 = phi_min - AngleofSpl / 2;
+                    phi_2 = phi_min + AngleofSpl / 2;
                     // Finding x_1, y_1 and x_2, y_2.
                     x_1 = R0 * Math.Cos(phi_1);
                     y_1 = R0 * Math.Sin(phi_1);
                     x_2 = R0 * Math.Cos(phi_2);
                     y_2 = R0 * Math.Sin(phi_2);
-                    // y = a * x + b
-                    double a, b;
-                    a = (y_2 - y_1) / (x_2 - x_1);
-                    b = y_1 - x_1 * (y_2 - y_1) / (x_2 - x_1);
-                    // Calculating substance going out. ONLY for some case.
+                    // Calculating substance volume going out. ONLY for some case.
                     /*             double agent_sum_min_part, agent_sum_max_part;
                     double S, alpha, x_bias, y_bias;
                     S = nodes_in[0].agent_c;
@@ -657,7 +656,7 @@ namespace BloodFlow
                     {
                     }   */
                     double step; // The step of integration - the distance between two points of the section. All section is divided on squares. The points are the centers of the squares.
-                    double x_sec, y_sec;
+                    double x_sec, y_sec, r_sec, phi_sec;
                     double agent_c_sum_in_min, agent_c_sum_in_max;
                     double volume_ag_in_min = 0; 
                     double volume_ag_in_max = 0; 
@@ -684,9 +683,11 @@ namespace BloodFlow
                         }
                         x_sec = x_sec + step;
                         check_in = true;
+                        r_sec = Math.Sqrt(Math.Pow(x_sec, 2) + Math.Pow(y_sec, 2));
+                        phi_sec = Math.Atan(y_sec / x_sec) + Math.PI;
                         while (check_in == true)
                         {
-                            if (((Math.Abs(y_sec) > Math.Abs(a * x_sec + b)) && (Math.Abs(y_sec) < Math.Pow(Math.Pow(R0, 2) - Math.Pow(x_sec, 2), 1 / 2))) || ((Math.Abs(x_sec) > Math.Abs(y_sec / a - b / a)) && (Math.Abs(x_sec) < Math.Pow(Math.Pow(R0, 2) - Math.Pow(y_sec, 2), 1 / 2))))
+                            if ((phi_sec > phi_1) && (phi_sec < phi_2) && (r_sec < R0) && (r_sec > (R0 - h) / Math.Cos((phi_sec - phi_min))))
                             {
                                 agent_c_sum_in_min = agent_c_sum_in_min + nodes_in[0].calcAgent_cInSectionPoint(nodes_in[0], x_sec, y_sec) * Math.Pow(step, 2);
                             }
@@ -695,6 +696,15 @@ namespace BloodFlow
                                 agent_c_sum_in_max = agent_c_sum_in_max + nodes_in[0].calcAgent_cInSectionPoint(nodes_in[0], x_sec, y_sec) * Math.Pow(step, 2);
                             }
                             x_sec = x_sec + step;
+                            r_sec = Math.Sqrt(Math.Pow(x_sec, 2) + Math.Pow(y_sec, 2));
+                            if (x_sec < 0)
+                            {
+                                phi_sec = Math.Atan(y_sec / x_sec) + Math.PI;
+                            }
+                            if (x_sec >= 0)
+                            {
+                                phi_sec = Math.Atan(y_sec / x_sec);
+                            }
                             if (Math.Pow(x_sec, 2) + Math.Pow(y_sec, 2) >= Math.Pow(R0, 2))
                             {
                                 check_in = false;
@@ -716,7 +726,7 @@ namespace BloodFlow
                     nodes_out[i_min].agent_xbias = 0;
                     nodes_out[i_max].agent_xbias = 0;
                     nodes_out[i_min].agent_ybias = 0;
-                    nodes_out[i_max].agent_ybias = 0;    
+                    nodes_out[i_max].agent_ybias = 0;   
                     // Writing calculated values to the vnet nodes. ONLY for some case.
                     int j;
                     j = index_in[0];
