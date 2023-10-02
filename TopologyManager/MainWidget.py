@@ -465,7 +465,7 @@ class MainWindow(QMainWindow):
             out_file.write(scale_str)
             t, d1, d2, d3 = self.dyn_data_manager.getData(node.id)
             for i in range(t.size):
-                out_file.write(str(t[i]) + "\t" + str(d1[i]) + "\t" + str(d2[i]) + "\n")
+                out_file.write(str(t[i]) + "\t" + str(d1[i]) + "\t" + str(d2[i]) + "\t" + str(d3[i]) + "\n")
             out_file.close()
 
     def addChartWidget(self, id, xdata, ydata_f, ydata_p=None, ydata_agent_c=None):
