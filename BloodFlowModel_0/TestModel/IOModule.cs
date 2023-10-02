@@ -521,7 +521,7 @@ namespace BloodFlow
 		
 		static public void WriteState(double current_time, 
             IWriteVascularNet v_net,
-            System.IO.StreamWriter out_dynamics_file, System.IO.StreamWriter propogation_data_file)  // Columns of a dynamics file: id, flow, pressure, velocity, agent concentration.
+            System.IO.StreamWriter out_dynamics_file, System.IO.StreamWriter propagation_data_file)  // Columns of a dynamics file: id, flow, pressure, velocity, agent concentration.
         {
             string out_text = "";
             Console.Write("Calc. time: ");
@@ -550,7 +550,7 @@ namespace BloodFlow
                 {
                     out_line += node.agent_c.ToString("F15") + " ";
                 }
-                propogation_data_file.WriteLine(out_line);
+                propagation_data_file.WriteLine(out_line);
             }
 
             out_text += "\n\n";

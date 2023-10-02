@@ -78,7 +78,7 @@ namespace BloodFlow
                 out_summary_filename = base_path + out_summary_filename;
             }
             System.IO.StreamWriter out_dynamics_file = new System.IO.StreamWriter(dyn_out_filename);
-            System.IO.StreamWriter propogation_data_file = new System.IO.StreamWriter("propagation.txt");
+            System.IO.StreamWriter propagation_data_file = new System.IO.StreamWriter("propagation.txt");
             System.IO.StreamWriter concentration_data_file = new System.IO.StreamWriter("concentration.txt");
             System.IO.StreamWriter mass_conservation_data_file = new System.IO.StreamWriter("mass_conservation.txt");
             stream_out_filename = out_filename + "s";
@@ -211,7 +211,7 @@ namespace BloodFlow
                     // State output, disabled if WRITE_TIME==0 
                     if (WRITE_TIME != 0 && bf_simulation.current_time >= WRITE_TIME)
                     {
-                        IO_Module.WriteState(bf_simulation.current_time, bf_simulation.getVNet(), out_dynamics_file, propogation_data_file);
+                        IO_Module.WriteState(bf_simulation.current_time, bf_simulation.getVNet(), out_dynamics_file, propagation_data_file);
                     }
 
                     if (bf_simulation.solution_state == SolutionState.ERROR)
