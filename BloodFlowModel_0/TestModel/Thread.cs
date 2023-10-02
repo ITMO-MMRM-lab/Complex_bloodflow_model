@@ -638,100 +638,100 @@ namespace BloodFlow
             this.state2nodes();
         }
 
-// agent - avg concentration; shape - parameter of the parabolic concentration profile
-public static void calculatePropagation(ref double[] agent, ref double[] shape, double[] rad, double[] velocity, int node_count, double[] h, double dt)
-{
-    // shape - aplha from eq.(8) (doi:10.1016/j.procs.2018.08.272)
-    // agent - S from eq.(8)
-    const double U_POW = 2; // velocity profile power, ζ
-    const double DIFF = 1e-4; // diffusion coeff, D
+        // agent - avg concentration; shape - parameter of the parabolic concentration profile
+        public static void calculatePropagation(ref double[] agent, ref double[] shape, double[] rad, double[] velocity, int node_count, double[] h, double dt)
+        {
+            // shape - aplha from eq.(8) (doi:10.1016/j.procs.2018.08.272)
+            // agent - S from eq.(8)
+            const double U_POW = 2; // velocity profile power, ζ
+            const double DIFF = 1e-4; // diffusion coeff, D
 
-    double[] agent_predictor = (double[])agent.Clone();
-    double[] agent_corrector = (double[])agent.Clone();
-    double[] shape_agent = new double[node_count];
-    double[] shape_agent_predictor = new double[node_count];
-    double[] shape_agent_corrector = new double[node_count];
-    double[] prop_coeff = new double[node_count];
-    double[] u_av_coeff = new double[node_count];
+            double[] agent_predictor = (double[])agent.Clone();
+            double[] agent_corrector = (double[])agent.Clone();
+            double[] shape_agent = new double[node_count];
+            double[] shape_agent_predictor = new double[node_count];
+            double[] shape_agent_corrector = new double[node_count];
+            double[] prop_coeff = new double[node_count];
+            double[] u_av_coeff = new double[node_count];
 
-    for (int i = 0; i < node_count; ++i)
-    {
-        prop_coeff[i] = 2 * Math.Pow(rad[i], 2) / (U_POW + 4);
-        u_av_coeff[i] = (U_POW + 2) / U_POW;
-        shape_agent[i] = shape[i] * agent[i];
-    }
+            for (int i = 0; i < node_count; ++i)
+            {
+                prop_coeff[i] = 2 * Math.Pow(rad[i], 2) / (U_POW + 4);
+                u_av_coeff[i] = (U_POW + 2) / U_POW;
+                shape_agent[i] = shape[i] * agent[i];
+            }
 
-    for (int i = 0; i < node_count - 1; ++i)
-    {
-        // [0: N - 1]
-        agent_predictor[i] = agent[i] - velocity[i] * dt / h[i] * (
-            agent[i + 1] - agent[i] + prop_coeff[i] * (shape[i + 1] * agent[i + 1] - shape[i] * agent[i])
-        ); //S(t+1) = S(t) + U*dt*(d(S) + prop_coeff*(d(alpha*S)))/dx  from system (8) eq.1 
-        // [0: N - 1]
-        shape_agent_predictor[i] = shape_agent[i] - u_av_coeff[i] * velocity[i] * dt / h[i] * (
-            shape_agent[i + 1] - shape_agent[i] + 1.0 / (rad[i] * rad[i]) * (agent[i + 1] - agent[i])
-            //U0 - average velocity
-            //S(t+1) = alpha*S(t) + U0*R^2*dt*(d(alpha*S) + U0/R^2*(d(S)))/dx  from system (8) eq.2
-        );
-    }
-    for (int i = 0; i < node_count - 1; ++i)
-    {
-        shape[i] = agent[i] > 1e-4 ? shape_agent_predictor[i] / agent[i] : 0;
-    }
+            for (int i = 0; i < node_count - 1; ++i)
+            {
+                // [0: N - 1]
+                agent_predictor[i] = agent[i] - velocity[i] * dt / h[i] * (
+                    agent[i + 1] - agent[i] + prop_coeff[i] * (shape[i + 1] * agent[i + 1] - shape[i] * agent[i])
+                ); //S(t+1) = S(t) + U*dt*(d(S) + prop_coeff*(d(alpha*S)))/dx  from system (8) eq.1 
+                // [0: N - 1]
+                shape_agent_predictor[i] = shape_agent[i] - u_av_coeff[i] * velocity[i] * dt / h[i] * (
+                    shape_agent[i + 1] - shape_agent[i] + 1.0 / (rad[i] * rad[i]) * (agent[i + 1] - agent[i])
+                    //U0 - average velocity
+                    //S(t+1) = alpha*S(t) + U0*R^2*dt*(d(alpha*S) + U0/R^2*(d(S)))/dx  from system (8) eq.2
+                );
+            }
+            for (int i = 0; i < node_count - 1; ++i)
+            {
+                shape[i] = agent[i] > 1e-4 ? shape_agent_predictor[i] / agent[i] : 0;
+            }
 
-    for (int i = 1; i < node_count; ++i)
-    {
-        // [1: N]
-        agent_corrector[i] = 0.5 * (agent[i] + agent_predictor[i] - velocity[i] * dt / h[i] * (
-            agent_predictor[i] - agent_predictor[i - 1] + prop_coeff[i] * (
-                shape[i] * agent_predictor[i] - shape[i - 1] * agent_predictor[i - 1]
-            )
-        ));
-    }
+            for (int i = 1; i < node_count; ++i)
+            {
+                // [1: N]
+                agent_corrector[i] = 0.5 * (agent[i] + agent_predictor[i] - velocity[i] * dt / h[i] * (
+                    agent_predictor[i] - agent_predictor[i - 1] + prop_coeff[i] * (
+                        shape[i] * agent_predictor[i] - shape[i - 1] * agent_predictor[i - 1]
+                    )
+                ));
+            }
 
-    for (int i = 1; i < node_count - 1; ++i)
-    {
-        // [1: N - 1] //adding diffusion term for S
-        agent_corrector[i] = agent_corrector[i] + dt * DIFF * (
-                agent_corrector[i + 1] + agent_corrector[i - 1] - 2 * agent_corrector[i]
-            ) / (h[i] * h[i]);
-    }
+            for (int i = 1; i < node_count - 1; ++i)
+            {
+                // [1: N - 1] //adding diffusion term for S
+                agent_corrector[i] = agent_corrector[i] + dt * DIFF * (
+                        agent_corrector[i + 1] + agent_corrector[i - 1] - 2 * agent_corrector[i]
+                    ) / (h[i] * h[i]);
+            }
 
-    for (int i = 0; i < node_count; ++i)
-    {
-        agent_corrector[i] = agent_corrector[i] > 0 ? agent_corrector[i] : 0;
-    }
+            for (int i = 0; i < node_count; ++i)
+            {
+                agent_corrector[i] = agent_corrector[i] > 0 ? agent_corrector[i] : 0;
+            }
 
-    for (int i = 1; i < node_count; ++i)
-    {
-        double agent_dt = (agent_corrector[i] - agent[i]) / dt;
+            for (int i = 1; i < node_count; ++i)
+            {
+                double agent_dt = (agent_corrector[i] - agent[i]) / dt;
 
-        // [1: N]
-        shape_agent_corrector[i] = 0.5 * (
-            shape_agent[i] + shape_agent_predictor[i] - u_av_coeff[i] * velocity[i] * dt / h[i] * (
-                shape_agent_predictor[i] - shape_agent_predictor[i - 1] + 1.0 / Math.Pow(rad[i], 2) * (
-                    agent_corrector[i] - agent_corrector[i - 1]
-                )
-            )
-        );
-    }
+                // [1: N]
+                shape_agent_corrector[i] = 0.5 * (
+                    shape_agent[i] + shape_agent_predictor[i] - u_av_coeff[i] * velocity[i] * dt / h[i] * (
+                        shape_agent_predictor[i] - shape_agent_predictor[i - 1] + 1.0 / Math.Pow(rad[i], 2) * (
+                            agent_corrector[i] - agent_corrector[i - 1]
+                        )
+                    )
+                );
+            }
 
-    for (int i = 0; i < node_count; ++i)
-    {// [0: N]
-        double agent_dt = (agent_corrector[i] - agent[i]) / dt;
+            for (int i = 0; i < node_count; ++i)
+            {// [0: N]
+                double agent_dt = (agent_corrector[i] - agent[i]) / dt;
         
-        shape_agent_corrector[i] = shape_agent_corrector[i] -
-            DIFF / Math.Pow(rad[i], 2) * shape_agent[i] * dt - // difusion for alpha*S field, eq 2. from system (8)
-            1.0 / Math.Pow(rad[i], 2) * agent_dt * dt; // time-derivative of S 1/R^2*dS/dt, fourth term in eq.2 sys.(8)
+                shape_agent_corrector[i] = shape_agent_corrector[i] -
+                    DIFF / Math.Pow(rad[i], 2) * shape_agent[i] * dt - // difusion for alpha*S field, eq 2. from system (8)
+                    1.0 / Math.Pow(rad[i], 2) * agent_dt * dt; // time-derivative of S 1/R^2*dS/dt, fourth term in eq.2 sys.(8)
 
-        shape[i] = agent_corrector[i] > 1e-4 ? shape_agent_corrector[i] / agent_corrector[i] : 0; // getting alpha from alpha*S
-        agent[i] = agent_corrector[i];
-    }
-    shape[node_count - 1] = shape[node_count - 2];
-    shape[0] = shape[1];
-    agent[0] = agent[1];
-    agent[node_count - 1] = agent[node_count - 2];
-}
+                shape[i] = agent_corrector[i] > 1e-4 ? shape_agent_corrector[i] / agent_corrector[i] : 0; // getting alpha from alpha*S
+                agent[i] = agent_corrector[i];
+            }
+            shape[node_count - 1] = shape[node_count - 2];
+            shape[0] = shape[1];
+            agent[0] = agent[1];
+            agent[node_count - 1] = agent[node_count - 2];
+        }
 
         protected double calcPressure(double _lumen_area, int i)
         {

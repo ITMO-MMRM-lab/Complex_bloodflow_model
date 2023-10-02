@@ -78,7 +78,7 @@ namespace BloodFlow
                 out_summary_filename = base_path + out_summary_filename;
             }
             System.IO.StreamWriter out_dynamics_file = new System.IO.StreamWriter(dyn_out_filename);
-            System.IO.StreamWriter propogation_data_file = new System.IO.StreamWriter("propogation.txt");
+            System.IO.StreamWriter propogation_data_file = new System.IO.StreamWriter("propagation.txt");
             System.IO.StreamWriter concentration_data_file = new System.IO.StreamWriter("concentration.txt");
             System.IO.StreamWriter mass_conservation_data_file = new System.IO.StreamWriter("mass_conservation.txt");
             stream_out_filename = out_filename + "s";
