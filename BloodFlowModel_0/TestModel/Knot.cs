@@ -713,8 +713,8 @@ namespace BloodFlow
                         x_sec = -step / 2;
                         y_sec = y_sec + step;
                     }
-                    volume_ag_in_min = agent_c_sum_in_min * nodes_in[0].velocity * Program.TIMESTEP;  
-                    volume_ag_in_max = agent_c_sum_in_max * nodes_in[0].velocity * Program.TIMESTEP;   
+                    volume_ag_in_min = agent_c_sum_in_min * velocity_sum / area_min * Program.TIMESTEP;  
+                    volume_ag_in_max = agent_c_sum_in_max * (velocity_sum_max - velocity_sum) / area_max * Program.TIMESTEP;   
                     volume_ag_out_min = volume_ag_in_min;
                     volume_ag_out_max = volume_ag_in_max;
                     volume_out_min = Math.Abs((nodes_out[i_min].velocity / v_sign[i_min])) * nodes_out[i_min].lumen_area * Program.TIMESTEP; // ONLY for flow going out

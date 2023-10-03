@@ -1,0 +1,7 @@
+<Test>
+Topology: Y_system_0025.top
+InletFlux: 0 static_inflow.txt
+OutletParams: Y_system_0025.par
+CollateralParams:
+Task:
+Agent: 0

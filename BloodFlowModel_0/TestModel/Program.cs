@@ -21,7 +21,8 @@ namespace BloodFlow
         public static float WRITE_TIME = 9.0f; // time to start writing output dynamics file
 
         public static float clot_set_time = 0.0f;
-        public static bool SNAPSHOT_AVAILABLE = File.Exists("snapshot.txt");
+        //    public static bool SNAPSHOT_AVAILABLE = File.Exists("snapshot.txt");
+        public static bool SNAPSHOT_AVAILABLE = false;   
         public static float STABILISATION_TIME = SNAPSHOT_AVAILABLE ? 0.0f : 10.0f;
 
         public static float CLOT_RELAXATION_PERIOD = 1.0f;
@@ -32,7 +33,7 @@ namespace BloodFlow
         
         public static string filename;
         public static int diss_mode = 1; // "0" stands for the non-modulus mode, "1" stands for the modulus mode
-        public static int knot_agent_mode = 1; // "1" stands for 1D recalculation of agent_c in knots, "3" stands for 3D recalculation of agent_c in knots
+        public static int knot_agent_mode = 3; // "1" stands for 1D recalculation of agent_c in knots, "3" stands for 3D recalculation of agent_c in knots
 
 
         static void Main(string[] args)
