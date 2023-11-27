@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import *
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QScrollArea
-from PyQt5.uic import *
+from PyQt6.QtWidgets import *
+from PyQt6 import QtGui, QtCore
+from PyQt6.QtWidgets import QScrollArea
+from PyQt6.uic import *
 from Plot import *
 from EditPanel import *
 
@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
         self.topology_painter.setFixedWidth(700)
 
         self.topology_painter.show()
-        self.setFocusPolicy(Qt.StrongFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.topology_painter.resizeEvent = self.topology_painter.resizeEvent
         self.topology_painter.dclk_signal.connect(self.addPointHandler)
 
@@ -74,9 +74,10 @@ class MainWindow(QMainWindow):
         self.horizontalSlider.setMinimum(0)
         self.horizontalSlider.setMaximum(100)
         self.horizontalSlider.setValue(50)
-        self.horizontalSlider.setTickPosition(QSlider.TicksBelow)
+#        self.horizontalSlider.setTickPosition(QSlider.TicksBelow)
         self.horizontalSlider.valueChanged.connect(lambda: self.showAgentValue(self.horizontalSlider.value(), self.MaxAgent))
-        self.horizontalSlider.setTickInterval(0.05)
+#        self.horizontalSlider.setTickInterval(0.05)
+ #       self.horizontalSlider.s.setTickInterval(0.05)
 
         self.periodSlider.hide()
         self.DecPeriod.hide()
@@ -103,7 +104,7 @@ class MainWindow(QMainWindow):
         self.timer.start(40)
         self.menu_timer.start(1000)
 
-        self.scroll_layout.setAlignment(Qt.AlignTop)
+        self.scroll_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.updateInfo()
 
     def changeTabHandler(self):
@@ -397,11 +398,11 @@ class MainWindow(QMainWindow):
 
     def showMessageBox(self, errorMessage):
         msg = QMessageBox()
-        msg.setIcon(QMessageBox.Information)
+        #msg.setIcon(QMessageBox.icon().Information)
         msg.setText(errorMessage)
         # msg.setInformativeText("Additional information")
         msg.setWindowTitle("Topology Manager")
-        x = msg.exec_()
+        x = msg.exec()
 
     def openDynHandler(self):
         fname = QFileDialog.getOpenFileName(self, 'Open *.dyn file')[0]
@@ -418,7 +419,7 @@ class MainWindow(QMainWindow):
         self.periodSlider.setMinimum(0)
         self.periodSlider.setMaximum(total_period_ids)
         self.periodSlider.setValue(0)
-        self.periodSlider.setTickPosition(QSlider.TicksBelow)
+#        self.periodSlider.setTickPosition(QSlider.TicksBelow)
         self.periodSlider.valueChanged.connect(
             lambda: self.updatePeriod())
 
@@ -493,7 +494,8 @@ class MainWindow(QMainWindow):
         if self.curr_chart != None:
             self.curr_chart.deselect()
 
-        if self.current_node in self.charts_dict:
+       # if self.current_node in self.charts_dict:
+        if self.CurrentNode in self.charts_dict:
             self.node_info_string = "Id=" + str(self.current_node.id)
             self.curr_chart = self.charts_dict[self.current_node]
             self.curr_chart.select()
@@ -501,12 +503,12 @@ class MainWindow(QMainWindow):
         self.updateInfo()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Right:
+        if event.key() == Qt.Key.Key_Right.value:
             self.changePointHandler(1)
-        if event.key() == Qt.Key_Left:
+        if event.key() == Qt.Key.Key_Left.value:
             self.changePointHandler(-1)
 
-        if event.key() == Qt.Key_Escape :
+        if event.key() == Qt.Key.Key_Escape.value:
             self.remPointHandler()
 
         self.topology_painter.event(event)

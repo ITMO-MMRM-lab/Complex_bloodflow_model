@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import *
-from PyQt5 import QtGui
-from PyQt5.QtWidgets import QScrollArea
-from PyQt5.uic import *
+from PyQt6.QtWidgets import *
+from PyQt6 import QtGui
+from PyQt6.QtWidgets import QScrollArea
+from PyQt6.uic import *
 from Plot import *
 
 import IOModule as IO

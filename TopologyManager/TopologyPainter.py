@@ -1,8 +1,9 @@
 import random
 
-from PyQt5.QtCore import *
-from PyQt5.QtCore import QObject, pyqtSignal
-from PyQt5.QtWidgets import *
+from PyQt6.QtCore import *
+from PyQt6.QtCore import QObject, pyqtSignal
+from PyQt6.QtOpenGLWidgets import QOpenGLWidget
+from PyQt6.QtWidgets import *
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -176,31 +177,31 @@ class Topology3DPainter(QOpenGLWidget):
         self.max_vector = max_vector
 
     def mousePressEvent(self, event):
-        self.event_processor.clk((event.x(), event.y()))
+        self.event_processor.clk((event.position().x(), event.position().y()))
         pass
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
-            self.angle_x, self.angle_y, self.trans_x, self.trans_y = self.event_processor.getGasture((event.x(), event.y()))
+        if event.buttons() == Qt.MouseButton.LeftButton:
+            self.angle_x, self.angle_y, self.trans_x, self.trans_y = self.event_processor.getGasture((event.position().x(), event.position().y()))
         pass
 
     def wheelEvent(self, event):
         self.trans_z, self.zoom = self.event_processor.transz(np.sign(event.angleDelta().y()))
 
     def keyPressEvent(self, event):
-        if event.key()==Qt.Key_Control:
+        if event.key()==Qt.Key.Key_Control.value:
             self.event_processor.cntrl_press()
 
     def keyReleaseEvent(self, event):
-        if event.key()==Qt.Key_Control:
+        if event.key()==Qt.Key.Key_Control.value:
             self.event_processor.cntrl_rel()
         pass
 
     def mouseDoubleClickEvent(self, event):
-        print((event.x(), event.y()))
+        print((event.position().x(), event.position().y()))
 
-        clk_x = event.x()
-        clk_y = (self.size.height() - event.y())
+        clk_x = event.position().x()
+        clk_y = (self.size.height() - event.position().y())
 
         min_i = 0
 

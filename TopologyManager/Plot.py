@@ -1,8 +1,8 @@
 
-from PyQt5.QtGui import *
-from PyQt5.QtGui import QPainter
-from PyQt5.QtCore import *
-from PyQt5.QtChart import *
+from PyQt6.QtGui import *
+from PyQt6.QtGui import QPainter
+from PyQt6.QtCore import *
+from PyQt6.QtCharts import *
 
 import numpy as np
 
@@ -40,7 +40,7 @@ class PlotWidget(QChartView):
         self.setMinimumHeight(100)
         self.setMaximumHeight(200)
 
-    def add_minor_data(self, xdata, ydata, titel="", color=Qt.blue):
+    def add_minor_data(self, xdata, ydata, titel="", color=QColor.blue):
         curve = QLineSeries()
         pen = curve.pen()
         if color is not None:
@@ -103,9 +103,9 @@ class PlotWidget(QChartView):
         if not (y_data1 is None):
             self.add_minor_data(x_data, y_data1, "Pressure, kPa")
         if y_data is not None:
-            self.add_minor_data(x_data, y_data2, "Agent C", color=Qt.green)
+            self.add_minor_data(x_data, y_data2, "Agent C", color=QColor.green)
 
-    def add_major_data(self, xdata, ydata, titel="", color=Qt.red):
+    def add_major_data(self, xdata, ydata, titel="", color=QColor.red):
         curve = QLineSeries()
         pen = curve.pen()
         if color is not None:

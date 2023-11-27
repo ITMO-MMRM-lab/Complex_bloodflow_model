@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import *
+from PyQt6.QtWidgets import *
 from OpenGL.GLUT import *
 
 import numpy as np
@@ -11,6 +11,6 @@ def main():
     window = MainWidget.MainWindow()
     window.setupUI()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 main()
