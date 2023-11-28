@@ -1,10 +1,10 @@
-
 from PyQt6.QtGui import *
 from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import *
 from PyQt6.QtCharts import *
 
 import numpy as np
+
 
 def series_to_polyline(xdata, ydata):
     """Convert series data to QPolygon(F) polyline
@@ -21,8 +21,9 @@ def series_to_polyline(xdata, ydata):
     memory[1:(size - 1) * 2 + 2:2] = ydata
     return polyline
 
+
 class PlotWidget(QChartView):
-    def __init__(self, main_titel, parent = None):
+    def __init__(self, main_titel, parent=None):
         QChartView.__init__(self, parent)
         self.ncurves = 0
         self.chart = QChart()
@@ -33,7 +34,7 @@ class PlotWidget(QChartView):
         self.chart.setTitleFont(font)
 
         self.chart.legend().hide()
-        self.setRenderHint(QPainter.Antialiasing)
+        # self.setRenderHint(QPainter..Antialiasing)
         self.chart.setTitle(main_titel)
         self.setChart(self.chart)
 
@@ -55,23 +56,22 @@ class PlotWidget(QChartView):
         add_axisY = QValueAxis()
         self.chart.addSeries(curve)
 
-        if (ydata.max() !=0):
-            mult_max = 10 ** (np.ceil(np.log10(abs(1 / ydata.max())))+1)
+        if (ydata.max() != 0):
+            mult_max = 10 ** (np.ceil(np.log10(abs(1 / ydata.max()))) + 1)
         else:
             mult_max = 1.0
 
-        if (ydata.min() !=0):
-            mult_min = 10 ** (np.ceil(np.log10(abs(1 / ydata.min())))+1)
+        if (ydata.min() != 0):
+            mult_min = 10 ** (np.ceil(np.log10(abs(1 / ydata.min()))) + 1)
         else:
             mult_min = 1.0
 
         max = np.ceil(ydata.max() * mult_max) / mult_max
         min = np.floor(mult_min * ydata.min()) / mult_min
 
-
-        if(max==min):
-            min = min-0.1
-            max = max+0.1
+        if (max == min):
+            min = min - 0.1
+            max = max + 0.1
 
         add_axisY.setMax(max)
         add_axisY.setMin(min)
@@ -83,10 +83,10 @@ class PlotWidget(QChartView):
         self.chart.addAxis(add_axisY, Qt.AlignRight)
         curve.attachAxis(add_axisY)
         str = self.chart.title()
-        if titel!="":
+        if titel != "":
             self.chart.setTitle(str + "; " + titel)
 
-        self.chart.setTitle(str + "; " +titel)
+        self.chart.setTitle(str + "; " + titel)
 
         self.ncurves += 1
 
@@ -109,6 +109,7 @@ class PlotWidget(QChartView):
         curve = QLineSeries()
         pen = curve.pen()
         if color is not None:
+            # pen.setColor(color)
             pen.setColor(color)
         pen.setWidthF(.1)
         curve.setPen(pen)
@@ -124,22 +125,22 @@ class PlotWidget(QChartView):
         axisX.setLabelsFont(font)
         axisX.setLabelFormat("%2.1f")
 
-        if (ydata.max() !=0):
-            mult_max = 10 ** (np.ceil(np.log10(abs(1 / ydata.max())))+1)
+        if (ydata.max() != 0):
+            mult_max = 10 ** (np.ceil(np.log10(abs(1 / ydata.max()))) + 1)
         else:
             mult_max = 1.0
 
-        if (ydata.min() !=0):
-            mult_min = 10 ** (np.ceil(np.log10(abs(1 / ydata.min())))+1)
+        if (ydata.min() != 0):
+            mult_min = 10 ** (np.ceil(np.log10(abs(1 / ydata.min()))) + 1)
         else:
             mult_min = 1.0
 
         max = np.ceil(ydata.max() * mult_max) / mult_max
         min = np.floor(mult_min * ydata.min()) / mult_min
 
-        if(max==min):
-            min = min-0.1
-            max = max+0.1
+        if (max == min):
+            min = min - 0.1
+            max = max + 0.1
 
         axisY.setMax(max)
         axisY.setMin(min)
@@ -152,7 +153,7 @@ class PlotWidget(QChartView):
         self.chart.setAxisY(axisY, curve)
 
         str = self.chart.title()
-        if titel!="":
+        if titel != "":
             self.chart.setTitle(str + "; " + titel)
 
         self.ncurves += 1

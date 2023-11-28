@@ -13,14 +13,15 @@ import TopologyGraph as Graph
 
 import numpy as np
 
+
 class MainWindow(QMainWindow):
     def __init__(self, *args):
         super(MainWindow, self).__init__(*args)
         loadUi('minimal_1.ui', self)
 
-        scroll_area   = self.findChild(QScrollArea, str('PlotsArea'))
+        scroll_area = self.findChild(QScrollArea, str('PlotsArea'))
         self.scroll_layout = QVBoxLayout()
-        self.scroll_layout.setContentsMargins(1,1,1,1,)
+        self.scroll_layout.setContentsMargins(1, 1, 1, 1, )
         plot_widget = QWidget()
         plot_widget.setLayout(self.scroll_layout)
         scroll_area.setWidget(plot_widget)
@@ -56,14 +57,13 @@ class MainWindow(QMainWindow):
         self.topology_painter.resizeEvent = self.topology_painter.resizeEvent
         self.topology_painter.dclk_signal.connect(self.addPointHandler)
 
-
         self.edit_panel = EditPanel(self.EditTab)
         self.ControlPanel.setCurrentIndex(0)
         self.ControlPanel.currentChanged.connect(self.changeTabHandler)
 
         self.actionLoadTop.triggered.connect(self.openTopHandler)
         self.actionClearTop.triggered.connect(self.unloadAll)
-        self.actionSaveTop.triggered.connect(lambda : self.saveTopology())
+        self.actionSaveTop.triggered.connect(lambda: self.saveTopology())
         self.actionSaveSelTop.triggered.connect(lambda: self.saveTopology(self.edit_panel.selection))
         self.actionLoadPar.triggered.connect(self.openParHandler)
         self.actionClearPar.triggered.connect(self.unloadParameters)
@@ -74,10 +74,11 @@ class MainWindow(QMainWindow):
         self.horizontalSlider.setMinimum(0)
         self.horizontalSlider.setMaximum(100)
         self.horizontalSlider.setValue(50)
-#        self.horizontalSlider.setTickPosition(QSlider.TicksBelow)
-        self.horizontalSlider.valueChanged.connect(lambda: self.showAgentValue(self.horizontalSlider.value(), self.MaxAgent))
-#        self.horizontalSlider.setTickInterval(0.05)
- #       self.horizontalSlider.s.setTickInterval(0.05)
+        #        self.horizontalSlider.setTickPosition(QSlider.TicksBelow)
+        self.horizontalSlider.valueChanged.connect(
+            lambda: self.showAgentValue(self.horizontalSlider.value(), self.MaxAgent))
+        #        self.horizontalSlider.setTickInterval(0.05)
+        #       self.horizontalSlider.s.setTickInterval(0.05)
 
         self.periodSlider.hide()
         self.DecPeriod.hide()
@@ -110,10 +111,10 @@ class MainWindow(QMainWindow):
     def changeTabHandler(self):
         curr_tab_name = self.ControlPanel.currentWidget().objectName()
 
-        if curr_tab_name=="ViewTab":
+        if curr_tab_name == "ViewTab":
             for n in self.frozen_points_list:
                 self.points_list.append(n)
-                if not(n.id in self.vascular_net):
+                if not (n.id in self.vascular_net):
                     self.remPointHandler(n)
                     self.frozen_points_list.remove(n)
             self.edit_panel.hideSelection()
@@ -130,7 +131,7 @@ class MainWindow(QMainWindow):
             self.topology_painter.dclk_signal.connect(lambda id: self.edit_panel.selectSlot(id))
 
     def addPointHandler(self, id):
-        self.node_info_string = "Id="+str(id)
+        self.node_info_string = "Id=" + str(id)
 
         if self.vascular_net is None or not (id in self.vascular_net.keys()):
             return None
@@ -168,16 +169,16 @@ class MainWindow(QMainWindow):
         self.actionClearPar.setEnabled(False)
         self.actionScreenshot.setEnabled(True)
 
-        if self.vascular_net!=None:
+        if self.vascular_net != None:
             self.actionClearTop.setEnabled(True)
             self.actionSaveTop.setEnabled(True)
             self.menuBC_Parameters.setEnabled(True)
             self.actionAddTopology.setEnabled(True)
 
-        if len(self.edit_panel.selection)>0:
+        if len(self.edit_panel.selection) > 0:
             self.actionSaveSelTop.setEnabled(True)
 
-        if self.par_path!="":
+        if self.par_path != "":
             self.actionClearPar.setEnabled(True)
 
     def unloadDynamics(self):
@@ -227,7 +228,7 @@ class MainWindow(QMainWindow):
         self.topology_painter.takeScreenshot()
 
     def unloadParameters(self):
-        if self.vascular_net!=None:
+        if self.vascular_net != None:
             for node in self.vascular_net.values():
                 node.bc_par = None
 
@@ -259,24 +260,26 @@ class MainWindow(QMainWindow):
         for p in self.vascular_net:
             p.bc_par = None
 
-    def pullBCHandler(self):#Not used
+    def pullBCHandler(self):  # Not used
         boundary_dict = {}
 
         for end_node in self.sec_vascular_net.values():
-            if len(end_node.bonds)>1:
+            if len(end_node.bonds) > 1:
                 continue
             for ref_node in self.vascular_net.values():
                 if ref_node.id == 13257 and end_node.id == 8739:
                     print("20847!")
-                if np.linalg.norm(ref_node.pos - end_node.pos) < 1e-4 and np.abs(ref_node.radius - end_node.radius)<2e-3:
-                    if ref_node.bonds.size == 1 and not(ref_node.bc_par is None):
+                if np.linalg.norm(ref_node.pos - end_node.pos) < 1e-4 and np.abs(
+                        ref_node.radius - end_node.radius) < 2e-3:
+                    if ref_node.bonds.size == 1 and not (ref_node.bc_par is None):
                         print(end_node.id)
                         end_node.bc_par = ref_node.bc_par
                         break
 
                     boundary_dict[ref_node.id] = end_node.id
                     ref_node.attribute = 0
-                    if np.linalg.norm(self.vascular_net[ref_node.bonds[0]].pos - self.sec_vascular_net[end_node.bonds[0]].pos)<1e-4:
+                    if np.linalg.norm(self.vascular_net[ref_node.bonds[0]].pos - self.sec_vascular_net[
+                        end_node.bonds[0]].pos) < 1e-4:
                         self.vascular_net[ref_node.bonds[0]].attribute = 0
                     else:
                         self.vascular_net[ref_node.bonds[1]].attribute = 0
@@ -284,7 +287,7 @@ class MainWindow(QMainWindow):
 
         origins = set(boundary_dict.keys())
         a_parts = []
-        while (len(origins)>0):
+        while (len(origins) > 0):
             protopart = set()
             front = set()
             o_id = origins.pop()
@@ -296,7 +299,7 @@ class MainWindow(QMainWindow):
             outlets = set()
             new_front = set()
             curr_front_value = 0
-            while len(front)>0:
+            while len(front) > 0:
                 for n_id in front:
                     n = self.vascular_net[n_id]
                     protopart.add(n)
@@ -321,10 +324,9 @@ class MainWindow(QMainWindow):
                 front = new_front.copy()
                 new_front.clear()
 
-            a_parts.append(Graph.ArterialPart(self.vascular_net ,protopart, inlets, outlets))
+            a_parts.append(Graph.ArterialPart(self.vascular_net, protopart, inlets, outlets))
             if list(inlets)[0].id == 13257:
                 print("13257")
-
 
         for p in a_parts:
             p.parseNet()
@@ -332,7 +334,7 @@ class MainWindow(QMainWindow):
                 print("13257")
             p.calculateResistance()
             p.calcSurrogateBC(self.dyn_data_manager)
-            #print ("R = " + str(p.R*1e3) + ", C = " + str(p.C*1e-3))
+            # print ("R = " + str(p.R*1e3) + ", C = " + str(p.C*1e-3))
 
         for ref_bc in boundary_dict.keys():
             if ref_bc == 20847:
@@ -340,11 +342,10 @@ class MainWindow(QMainWindow):
             if self.vascular_net[ref_bc].bc_par:
                 self.sec_vascular_net[boundary_dict[ref_bc]].bc_par = self.vascular_net[ref_bc].bc_par
 
-        id_dict = IO.write_top_file("secondary.top",self.sec_vascular_net)
+        id_dict = IO.write_top_file("secondary.top", self.sec_vascular_net)
         IO.write_par_file("secondary.par", self.sec_vascular_net, id_dict)
 
-        print ("Finished!")
-
+        print("Finished!")
 
     def clearSecTopology(self):
         self.sec_vascular_net.clear()
@@ -373,7 +374,7 @@ class MainWindow(QMainWindow):
 
     def openTopHandler(self):
         fname = QFileDialog.getOpenFileName(self, 'Open *.top file')[0]
-        if fname=="":
+        if fname == "":
             return None
 
         self.error_msg = ""
@@ -398,7 +399,7 @@ class MainWindow(QMainWindow):
 
     def showMessageBox(self, errorMessage):
         msg = QMessageBox()
-        #msg.setIcon(QMessageBox.icon().Information)
+        # msg.setIcon(QMessageBox.icon().Information)
         msg.setText(errorMessage)
         # msg.setInformativeText("Additional information")
         msg.setWindowTitle("Topology Manager")
@@ -406,7 +407,7 @@ class MainWindow(QMainWindow):
 
     def openDynHandler(self):
         fname = QFileDialog.getOpenFileName(self, 'Open *.dyn file')[0]
-        if fname=="":
+        if fname == "":
             return None
 
         self.dyn_data_manager.unloadDynamics()
@@ -419,7 +420,7 @@ class MainWindow(QMainWindow):
         self.periodSlider.setMinimum(0)
         self.periodSlider.setMaximum(total_period_ids)
         self.periodSlider.setValue(0)
-#        self.periodSlider.setTickPosition(QSlider.TicksBelow)
+        #        self.periodSlider.setTickPosition(QSlider.TicksBelow)
         self.periodSlider.valueChanged.connect(
             lambda: self.updatePeriod())
 
@@ -445,7 +446,7 @@ class MainWindow(QMainWindow):
             t, d1, d2, d3 = self.dyn_data_manager.getData(node.id)
             self.charts_dict[node] = self.addChartWidget(node.id, t, d1, d2, d3)
 
-        if len(self.points_list)>0:
+        if len(self.points_list) > 0:
             self.curr_chart = self.charts_dict[self.current_node]
             self.curr_chart.select
 
@@ -453,7 +454,7 @@ class MainWindow(QMainWindow):
 
     def saveDynamicsHandler(self):
         f_prefix = QFileDialog.getSaveFileName(self, 'Choose path and file name prefix...')[0]
-        if f_prefix=="":
+        if f_prefix == "":
             return None
 
         for node in self.points_list:
@@ -470,15 +471,15 @@ class MainWindow(QMainWindow):
             out_file.close()
 
     def addChartWidget(self, id, xdata, ydata_f, ydata_p=None, ydata_agent_c=None):
-        chart = PlotWidget("Id = "+str(id))
-        chart.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        chart = PlotWidget("Id = " + str(id))
+        chart.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         chart.setMinimumHeight(200)
         chart.setObjectName(str(id))
-        chart.add_major_data(xdata, ydata_f, "Flux, ml/s", color=Qt.blue)
+        chart.add_major_data(xdata, ydata_f, "Flux, ml/s", color=QColor.blue)
         if not (ydata_p is None):
-            chart.add_minor_data(xdata, ydata_p, "Pressure, kPa", color=Qt.red)
+            chart.add_minor_data(xdata, ydata_p, "Pressure, kPa", color=QColor.red)
         if ydata_agent_c is not None:
-            chart.add_minor_data(xdata, ydata_agent_c, "Agent C", color=Qt.green)
+            chart.add_minor_data(xdata, ydata_agent_c, "Agent C", color=QColor.green)
 
         self.scroll_layout.addWidget(chart)
         return chart
@@ -494,7 +495,7 @@ class MainWindow(QMainWindow):
         if self.curr_chart != None:
             self.curr_chart.deselect()
 
-       # if self.current_node in self.charts_dict:
+        # if self.current_node in self.charts_dict:
         if self.CurrentNode in self.charts_dict:
             self.node_info_string = "Id=" + str(self.current_node.id)
             self.curr_chart = self.charts_dict[self.current_node]
@@ -513,8 +514,8 @@ class MainWindow(QMainWindow):
 
         self.topology_painter.event(event)
 
-    def remPointHandler(self, node = None):
-        if node!=None:
+    def remPointHandler(self, node=None):
+        if node != None:
             if node in self.points_list:
                 self.current_node = node
             else:
@@ -561,10 +562,10 @@ class MainWindow(QMainWindow):
     def updateInfo(self):
         final_msg = ""
 
-        if self.error_msg!="":
+        if self.error_msg != "":
             final_msg += self.error_msg
 
-        if self.vascular_net is None or len(self.vascular_net)==0:
+        if self.vascular_net is None or len(self.vascular_net) == 0:
             final_msg += "Load topology data."
             self.Info.setText(final_msg)
             return 0
@@ -577,30 +578,30 @@ class MainWindow(QMainWindow):
 
         bc_num = 0
         for node in self.vascular_net.values():
-            if node.bc_par!=None:
-                bc_num+=1
+            if node.bc_par != None:
+                bc_num += 1
 
         final_msg += self.top_info_string
 
         final_msg += "\n"
         final_msg += "Parameters: "
-        if self.par_path=="":
-            final_msg+="No parameters loaded.\n"
+        if self.par_path == "":
+            final_msg += "No parameters loaded.\n"
         else:
             final_msg += self.par_path + "\n"
             final_msg += str(bc_num) + " outlet BC params loaded."
         final_msg += "\n"
-        self.node_info_string=""
-        if len(self.points_list)>0:
-           # self.node_info_string += "Current node: "
-           # self.node_info_string += str(self.current_node.id) + "\n"
+        self.node_info_string = ""
+        if len(self.points_list) > 0:
+            # self.node_info_string += "Current node: "
+            # self.node_info_string += str(self.current_node.id) + "\n"
             self.CurrentNode.setText(str(self.current_node.id))
             self.node_info_string += "Selected nodes: "
 
         for node in self.points_list:
-            self.node_info_string+=str(node.id) + "; "
-        self.node_info_string+="\n"
-        final_msg+=self.node_info_string
+            self.node_info_string += str(node.id) + "; "
+        self.node_info_string += "\n"
+        final_msg += self.node_info_string
 
         final_msg += "\n"
         final_msg += self.dyn_data_manager.getInfo()
@@ -611,16 +612,16 @@ class MainWindow(QMainWindow):
         if fname == "":
             return None
 
-        try :
+        try:
             name = fname.split('.')[-2]
-        except :
+        except:
             name = fname
 
-        fname_top = name +".top"
+        fname_top = name + ".top"
         fname_par = name + ".par"
 
         id_dict = IO.write_top_file(fname_top, self.vascular_net, sel)
-        if self.par_path=="":
+        if self.par_path == "":
             return None
         if sel == None:
             IO.write_par_file(fname_par, self.vascular_net, id_dict)
@@ -638,11 +639,12 @@ class MainWindow(QMainWindow):
         self.dyn_data_manager.updateChartData(charts_list)
         self.updateInfo()
 
+
 class DataManager:
     def __init__(self):
         self.data_dict = {}
         self.period_ids = np.array([])
-        self.time_data  = np.array([])
+        self.time_data = np.array([])
         self.name = ""
         self.period = 0
 
@@ -650,7 +652,7 @@ class DataManager:
         self.max_agent_c = None
         pass
 
-    def update_agent_c_range(self): # Checks the min and max agent_c value of all nodes on a specific period of time
+    def update_agent_c_range(self):  # Checks the min and max agent_c value of all nodes on a specific period of time
         min_value = None
         max_value = None
 
@@ -673,7 +675,7 @@ class DataManager:
             return 0.01
 
     def isEmpty(self):
-        if self.period_ids.size==0:
+        if self.period_ids.size == 0:
             return True
         return False
 
@@ -709,7 +711,7 @@ class DataManager:
         self.period = 0
 
     def updateChartData(self, chart_list):
-        if self.period_ids.size==0:
+        if self.period_ids.size == 0:
             return None
 
         lb = self.period_ids[self.period]
@@ -757,7 +759,7 @@ class DataManager:
     def getInfo(self):
         dyn_info_string = ""
         if self.isEmpty():
-            dyn_info_string="No dynamic data.\n"
+            dyn_info_string = "No dynamic data.\n"
             return dyn_info_string
 
         lb = self.period_ids[self.period]
@@ -767,7 +769,5 @@ class DataManager:
 
         dyn_info_string += "Dynamics: " + self.name + ";\nTime: " + str(
             self.time_data[lb]) + " - " + str(self.time_data[rb]) + "; "
-        dyn_info_string += "Periods: " + str(self.period) + "/" + str(len(self.period_ids)-2) + "\n"
+        dyn_info_string += "Periods: " + str(self.period) + "/" + str(len(self.period_ids) - 2) + "\n"
         return dyn_info_string
-
-
