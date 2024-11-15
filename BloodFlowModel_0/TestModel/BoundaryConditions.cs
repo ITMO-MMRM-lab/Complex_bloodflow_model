@@ -182,7 +182,7 @@ namespace BloodFlow
                 current_velocity = U;
 
                 // temporary solution for adding agent to the artery
-                if (insert_type == "IV" && (current_time > (Program.STABILISATION_TIME + 0.5)) && (current_time < (Program.STABILISATION_TIME + 0.551)) && (agent_in == true))
+                if (insert_type == "IV" && (current_time > (Program.STABILISATION_TIME)) && (current_time < (Program.STABILISATION_TIME + 0.001)) && (agent_in == true))
                 {
                     /*double center = nodes.Count / 2;
                     double h = 2;

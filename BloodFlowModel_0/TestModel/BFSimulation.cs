@@ -692,7 +692,7 @@ namespace BloodFlow
               //      }
                     // total_amount += Math.Pow((1.0f - Convert.ToDouble(k_el / 10000.0f)), (re_entering_delta[i] * 10000f)) * outlets_agent_amount[i].Dequeue();
                 }
-            }
+            } 
             ///TODO: add time averaging to the queues
             total_amount = total_amount + heart_amount;
             double dz_inlet = Vector3.Distance(v_net.bounds[InletId].core_node.position, v_net.bounds[InletId].core_node.neighbours[0].position);
@@ -709,7 +709,7 @@ namespace BloodFlow
             //v_net.bounds[InletId].core_node.agent_c = v_net.bounds[InletId].core_node.neighbours[0].agent_c;
             //Console.WriteLine("inlet dz " + dz_inlet + " inlet lumen " + v_net.bounds[InletId].core_node.neighbours[0].lumen_area_0);
             heart_amount_agent = heart_amount;
-
+   
             foreach (var tr in v_net.threads)
             {
                 tr.updateState();

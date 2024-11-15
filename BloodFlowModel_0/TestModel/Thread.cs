@@ -644,7 +644,7 @@ namespace BloodFlow
             // shape - aplha from eq.(8) (doi:10.1016/j.procs.2018.08.272)
             // agent - S from eq.(8)
             const double U_POW = 2; // velocity profile power, ζ
-            const double DIFF = 1e-4; // diffusion coeff, D
+            const double DIFF = 0; // diffusion coeff, D
 
             double[] agent_predictor = (double[])agent.Clone();
             double[] agent_corrector = (double[])agent.Clone();
@@ -657,6 +657,7 @@ namespace BloodFlow
             for (int i = 0; i < node_count; ++i)
             {
                 prop_coeff[i] = 2 * Math.Pow(rad[i], 2) / (U_POW + 4);
+               // prop_coeff[i] = 0;
                 u_av_coeff[i] = (U_POW + 2) / U_POW;
                 shape_agent[i] = shape[i] * agent[i];
             }
@@ -666,13 +667,11 @@ namespace BloodFlow
                 // [0: N - 1]
                 agent_predictor[i] = agent[i] - velocity[i] * dt / h[i] * (
                     agent[i + 1] - agent[i] + prop_coeff[i] * (shape[i + 1] * agent[i + 1] - shape[i] * agent[i])
-                ); //S(t+1) = S(t) + U*dt*(d(S) + prop_coeff*(d(alpha*S)))/dx  from system (8) eq.1 
+                ); //S(t+1) = S(t) - U*dt*(d(S) + prop_coeff*(d(alpha*S)))/dx  from system (8) eq.1 
                 // [0: N - 1]
                 shape_agent_predictor[i] = shape_agent[i] - u_av_coeff[i] * velocity[i] * dt / h[i] * (
                     shape_agent[i + 1] - shape_agent[i] + 1.0 / (rad[i] * rad[i]) * (agent[i + 1] - agent[i])
-                    //U0 - average velocity
-                    //S(t+1) = alpha*S(t) + U0*R^2*dt*(d(alpha*S) + U0/R^2*(d(S)))/dx  from system (8) eq.2
-                );
+                ); //alpha*S(t+1) = alpha*S(t) - U0*dt*(d(alpha*S) + 1/R^2*(d(S)))/dx  from system (8) eq.2
             }
             for (int i = 0; i < node_count - 1; ++i)
             {

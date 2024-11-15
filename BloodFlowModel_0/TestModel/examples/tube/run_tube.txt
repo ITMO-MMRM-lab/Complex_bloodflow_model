@@ -1,0 +1,7 @@
+<Test>
+Topology: tube_precise.top
+InletFlux: 0 static_inflow.txt
+OutletParams: tube_precise.par
+CollateralParams:
+Task:
+Agent: 0

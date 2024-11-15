@@ -15,7 +15,7 @@ namespace BloodFlow
 
     class Program
     {
-        public static float TIMESTEP = 1.0e-4f;
+        public static float TIMESTEP = 1.0e-5f;
         public static float AV_TIME = 1.0f;
         public static float END_TIME = 15.0f; // end time of the simulation, redefined for stenosis case
         public static float WRITE_TIME = 9.0f; // time to start writing output dynamics file
@@ -27,13 +27,13 @@ namespace BloodFlow
 
         public static float CLOT_RELAXATION_PERIOD = 1.0f;
         public static float CLOT_REMOVE_RELAXATION_PERIOD = 1.0f;
-        public static float OUTPUT_PERIOD = 0.02f;
+        public static float OUTPUT_PERIOD = 0.01f;
         public static BFSimulator bf_simulation;
 
         
         public static string filename;
         public static int diss_mode = 1; // "0" stands for the non-modulus mode, "1" stands for the modulus mode
-        public static int knot_agent_mode = 3; // "1" stands for 1D recalculation of agent_c in knots, "3" stands for 3D recalculation of agent_c in knots
+        public static int knot_agent_mode = 1; // "1" stands for 1D recalculation of agent_c in knots, "3" stands for 3D recalculation of agent_c in knots
 
 
         static void Main(string[] args)
