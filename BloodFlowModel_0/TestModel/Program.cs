@@ -21,7 +21,7 @@ namespace BloodFlow
         public static float WRITE_TIME = 9.0f; // time to start writing output dynamics file
 
         public static float clot_set_time = 0.0f;
-        //    public static bool SNAPSHOT_AVAILABLE = File.Exists("snapshot.txt");
+       // public static bool SNAPSHOT_AVAILABLE = File.Exists("snapshot.txt");
         public static bool SNAPSHOT_AVAILABLE = false;   
         public static float STABILISATION_TIME = SNAPSHOT_AVAILABLE ? 0.0f : 10.0f;
 

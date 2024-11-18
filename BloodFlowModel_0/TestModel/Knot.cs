@@ -845,7 +845,7 @@ namespace BloodFlow
                 prev_velocity[i] = nodes[i].velocity;
                 chrt_b[i] = 0;
                 chrt_f[i] = 0;               
-                c_dst[i] = Math.Pow(nodes[i].lumen_area_0, -0.25f) * Math.Sqrt(beta_1[i] / 2.0f /  GlobalDefs.BLOOD_DENSITY);
+                c_dst[i] = Math.Pow(nodes[i].lumen_area_0, 0.25f) * Math.Sqrt(beta_1[i] / 2.0f /  GlobalDefs.BLOOD_DENSITY);
                 lumen_area_old[i] = lumen_area_0[i];
             }
 
