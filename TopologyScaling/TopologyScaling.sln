@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.35425.106
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopologyScaling", "TopologyScaling\TopologyScaling.csproj", "{C6A74644-1266-4084-9491-D9DA358169DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6A74644-1266-4084-9491-D9DA358169DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6A74644-1266-4084-9491-D9DA358169DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6A74644-1266-4084-9491-D9DA358169DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6A74644-1266-4084-9491-D9DA358169DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A3EC8D8-4AE1-4717-8299-E5CD1E4A384C}
+	EndGlobalSection
+EndGlobal
