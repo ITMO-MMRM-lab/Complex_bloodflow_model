@@ -1,0 +1,6 @@
+<Test>
+Topology: full_body_Boileau_LR_2.5mm.top
+InletFlux: 0 heart_inflow.txt
+OutletParams: params_Boil.par
+Task: 
+DownDirection: 0.0 0.0 0.0

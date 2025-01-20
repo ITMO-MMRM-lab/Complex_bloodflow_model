@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Refinement", "Refinement\Refinement.csproj", "{909E5278-DCCD-4EAC-A09C-79AE78DB88ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FullSearch", "FullSearch\FullSearch.csproj", "{673D6B3C-8C99-44B1-98E5-2E0D03F73C05}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{909E5278-DCCD-4EAC-A09C-79AE78DB88ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{909E5278-DCCD-4EAC-A09C-79AE78DB88ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{909E5278-DCCD-4EAC-A09C-79AE78DB88ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{909E5278-DCCD-4EAC-A09C-79AE78DB88ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673D6B3C-8C99-44B1-98E5-2E0D03F73C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{673D6B3C-8C99-44B1-98E5-2E0D03F73C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{673D6B3C-8C99-44B1-98E5-2E0D03F73C05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{673D6B3C-8C99-44B1-98E5-2E0D03F73C05}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

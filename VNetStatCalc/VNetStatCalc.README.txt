@@ -1,0 +1,2 @@
+Run the program in command line like this:
+VNetStatCalc.exe vnet.top output.stat

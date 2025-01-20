@@ -15,10 +15,10 @@ namespace BloodFlow
 
     class Program
     {
-        public static float TIMESTEP = 1.0e-5f;
+        public static float TIMESTEP = 0.5e-4f;
         public static float AV_TIME = 1.0f;
-        public static float END_TIME = 15.0f; // end time of the simulation, redefined for stenosis case
-        public static float WRITE_TIME = 9.0f; // time to start writing output dynamics file
+        public static float END_TIME = 12.0f; // end time of the simulation, redefined for stenosis case
+        public static float WRITE_TIME = 2.0f; // time to start writing output dynamics file
 
         public static float clot_set_time = 0.0f;
        // public static bool SNAPSHOT_AVAILABLE = File.Exists("snapshot.txt");

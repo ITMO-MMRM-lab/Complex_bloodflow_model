@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopLineGen", "TopLineGen\TopLineGen.csproj", "{8CC445D9-9808-4E39-B028-967612052650}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopForkGen", "TopForkGen\TopForkGen.csproj", "{547FBAE6-41B6-42F8-9341-63918ADF2805}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8CC445D9-9808-4E39-B028-967612052650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CC445D9-9808-4E39-B028-967612052650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CC445D9-9808-4E39-B028-967612052650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CC445D9-9808-4E39-B028-967612052650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{547FBAE6-41B6-42F8-9341-63918ADF2805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{547FBAE6-41B6-42F8-9341-63918ADF2805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{547FBAE6-41B6-42F8-9341-63918ADF2805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{547FBAE6-41B6-42F8-9341-63918ADF2805}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

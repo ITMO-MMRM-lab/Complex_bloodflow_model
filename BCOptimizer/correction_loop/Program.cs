@@ -14,12 +14,12 @@ namespace correction_loop
     public static class GlobalDefs
     {
         public static int mode = 1; // "0" stands for the difference mode, "1" stands for the dissipation mode
-        public static string path = @"..\..\input\heart\lca_2\";
+        public static string path = @"..\..\input\patient_1\";
         public static string path_d = path + "temp.dyn";
-        public static string path_r = path + "run_lca.txt";
+        public static string path_r = path + "run_patient_1.txt";
         public static string path_bin = @"..\..\..\bin\";
         public static string path_m = path_bin + "TestModel.exe";
-        public static string model_args = @"..\..\input\heart\lca_2\run_lca.txt " + @"..\..\input\heart\lca_2";
+        public static string model_args = @"..\..\input\patient_1\run_patient_1.txt " + @"..\..\input\patient_1\";
         public static string path_diss = path + "dissipation.txt";
         public static string path_h_p = path + "heart_period.txt";
         public static string path_timestep = path + "timestep.txt";
@@ -41,12 +41,12 @@ namespace correction_loop
         public static string path_par = null;
         public static string path_mask = GlobalDefs.path + @"par_mask.par";
         public static int in_bond_num;
-        public static double diff_step = 0.1;
+        public static double diff_step = 0.5;
         public static int[] term_bonds;
         public static double it_num = 0;
         public static bool[] term_mask;
-        public static double[] Q_t_b_av = { 0.1, 0.1, 0.1 };
-        public static double scaling_koeff_t_b = 0;
+        public static double[] Q_t_b_av = { 10.619, 2.311, 1.885 };
+        public static double scaling_koeff_t_b = 1000;
         public static string path_test_bonds = GlobalDefs.path + @"test_bonds.par";
         public static int[] test_bonds;
     }

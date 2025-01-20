@@ -1,0 +1,6 @@
+<Test>
+Topology: full_body_patient_1.top
+InletFlux: 0 heart_inflow_patient_1.txt
+OutletParams: params_patient_1_opt2.par
+Task: 
+DownDirection: 0.0 0.0 0.0

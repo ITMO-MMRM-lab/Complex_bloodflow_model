@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace TopologyScaling
 {
