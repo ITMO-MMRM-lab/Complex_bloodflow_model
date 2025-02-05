@@ -162,7 +162,7 @@ namespace TopologyScaling
             textOutput = "Name: Scaled\nCoordinates:\n";
             for (line_counter = 0; line_counter < coords_counter; line_counter++)
             {
-                textOutput = textOutput + coords_out[line_counter].id + " X:" + coords_out[line_counter].X + " Y:" + coords_out[line_counter].Y + " Z:" + coords_out[line_counter].Z + " R:" + coords_out[line_counter].R + " C:" + coords_out[line_counter].C + "\n";
+                textOutput = textOutput + coords_out[line_counter].id + " X:" + coords_out[line_counter].X + " Y:" + coords_out[line_counter].Y + " Z:" + coords_out[line_counter].Z + " R:" + coords_out[line_counter].R + " C:" + coords_out[line_counter].C + ".0" + "\n";
             }
             textOutput = textOutput + "\n" + textBonds;
 

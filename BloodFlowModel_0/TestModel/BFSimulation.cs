@@ -23,7 +23,7 @@ namespace BloodFlow
         public static double DIASTOLIC_PRESSURE_1 = 0; //Pa
         public static double SISTOLIC_PRESSURE = 15.9e+3f; //Pa
         public static double GRAVITY = 9.8f;// m/s^2
-        public static double FRICTION_C = 8.0f;
+        public static double FRICTION_C = 22.0f;
         public static double HEART_PERIOD = 1.0;
 
         public static double phi = 0e3;

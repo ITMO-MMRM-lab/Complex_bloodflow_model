@@ -41,7 +41,7 @@ namespace correction_loop
         public static string path_par = null;
         public static string path_mask = GlobalDefs.path + @"par_mask.par";
         public static int in_bond_num;
-        public static double diff_step = 0.5;
+        public static double diff_step = 1.0;
         public static int[] term_bonds;
         public static double it_num = 0;
         public static bool[] term_mask;
